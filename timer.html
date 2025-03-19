@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer Prototype</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .timer-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+        }
+        circle {
+            transition: stroke-dashoffset 1s linear;
+        }
+        .timer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button, input {
+            margin: 5px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-container">
+        <svg width="200" height="200">
+            <circle cx="100" cy="100" r="90" stroke="gray" stroke-width="10" fill="none" />
+            <circle id="progress" cx="100" cy="100" r="90" stroke="red" stroke-width="10" fill="none"
+                    stroke-dasharray="565" stroke-dashoffset="0" stroke-linecap="round" />
+        </svg>
+        <div class="timer" id="timer-display">25:00</div>
+    </div>
+    <div class="controls">
+        <input type="number" id="time-input" value="25" min="1" max="60"> minutes
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+    </div>
+    
+    <script>
+        let duration = 1500; // Default 25 minutes in seconds
+        let timeLeft = duration;
+        let timerInterval;
+        let running = false;
+        const timerDisplay = document.getElementById("timer-display");
+        const progressCircle = document.getElementById("progress");
+        const fullDashOffset = 565;
+        
+        function updateDisplay() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            progressCircle.style.strokeDashoffset = fullDashOffset * (timeLeft / duration);
+        }
+        
+        function startTimer() {
+            if (!running) {
+                running = true;
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        running = false;
+                    }
+                }, 1000);
+            }
+        }
+        
+        function pauseTimer() {
+            running = false;
+            clearInterval(timerInterval);
+        }
+        
+        document.getElementById("time-input").addEventListener("change", function () {
+            duration = this.value * 60;
+            timeLeft = duration;
+            updateDisplay();
+        });
+        
+        updateDisplay();
+    </script>
+</body>
+</html>
