@@ -17,13 +17,15 @@
         }
         .timer-container {
             position: relative;
-            width: 200px;
-            height: 200px;
+            width: 400px; /* Doubled size */
+            height: 400px; /* Doubled size */
         }
         svg {
             position: absolute;
             top: 0;
             left: 0;
+            width: 400px; /* Doubled size */
+            height: 400px; /* Doubled size */
             transform: rotate(-90deg);
         }
         circle {
@@ -34,24 +36,24 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 2rem;
+            font-size: 4rem; /* Doubled size */
         }
         .controls {
-            margin-top: 20px;
+            margin-top: 40px; /* Doubled margin */
         }
         button, input {
-            margin: 5px;
-            padding: 10px;
-            font-size: 1rem;
+            margin: 10px; /* Doubled margin */
+            padding: 20px; /* Doubled padding */
+            font-size: 2rem; /* Doubled font size */
         }
     </style>
 </head>
 <body>
     <div class="timer-container">
-        <svg width="200" height="200">
-            <circle cx="100" cy="100" r="90" stroke="#EA3548" stroke-width="10" fill="none" />
-            <circle id="progress" cx="100" cy="100" r="90" stroke="#222" stroke-width="12" fill="none"
-                    stroke-dasharray="565" stroke-dashoffset="0" stroke-linecap="round" />
+        <svg width="400" height="400">
+            <circle cx="200" cy="200" r="180" stroke="#EA3548" stroke-width="20" fill="none" />
+            <circle id="progress" cx="200" cy="200" r="180" stroke="#222" stroke-width="24" fill="none"
+                    stroke-dasharray="1130" stroke-dashoffset="0" stroke-linecap="round" />
         </svg>
         <div class="timer" id="timer-display">25:00</div>
     </div>
@@ -67,7 +69,7 @@
         let running = false;
         const timerDisplay = document.getElementById("timer-display");
         const progressCircle = document.getElementById("progress");
-        const fullDashOffset = 565;
+        const fullDashOffset = 1130; // Adjusted for new circle size
         const startPauseBtn = document.getElementById("start-pause-btn");
         
         function updateDisplay() {
