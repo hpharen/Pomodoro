@@ -49,16 +49,15 @@
 <body>
     <div class="timer-container">
         <svg width="200" height="200">
-            <circle cx="100" cy="100" r="90" stroke="gray" stroke-width="10" fill="none" />
-            <circle id="progress" cx="100" cy="100" r="90" stroke="red" stroke-width="10" fill="none"
+            <circle cx="100" cy="100" r="90" stroke="#EA3548" stroke-width="10" fill="none" />
+            <circle id="progress" cx="100" cy="100" r="90" stroke="#222" stroke-width="12" fill="none"
                     stroke-dasharray="565" stroke-dashoffset="0" stroke-linecap="round" />
         </svg>
         <div class="timer" id="timer-display">25:00</div>
     </div>
     <div class="controls">
         <input type="number" id="time-input" value="25" min="1" max="60"> minutes
-        <button onclick="startTimer()">Start</button>
-        <button onclick="pauseTimer()">Pause</button>
+        <button id="start-pause-btn" onclick="toggleTimer()">▶</button>
     </div>
     
     <script>
@@ -69,6 +68,7 @@
         const timerDisplay = document.getElementById("timer-display");
         const progressCircle = document.getElementById("progress");
         const fullDashOffset = 565;
+        const startPauseBtn = document.getElementById("start-pause-btn");
         
         function updateDisplay() {
             let minutes = Math.floor(timeLeft / 60);
@@ -77,8 +77,12 @@
             progressCircle.style.strokeDashoffset = fullDashOffset * (timeLeft / duration);
         }
         
-        function startTimer() {
-            if (!running) {
+        function toggleTimer() {
+            if (running) {
+                clearInterval(timerInterval);
+                running = false;
+                startPauseBtn.textContent = "▶"; // Play icon
+            } else {
                 running = true;
                 timerInterval = setInterval(() => {
                     if (timeLeft > 0) {
@@ -87,14 +91,11 @@
                     } else {
                         clearInterval(timerInterval);
                         running = false;
+                        startPauseBtn.textContent = "▶"; // Reset to play icon
                     }
                 }, 1000);
+                startPauseBtn.textContent = "⏸"; // Pause icon
             }
-        }
-        
-        function pauseTimer() {
-            running = false;
-            clearInterval(timerInterval);
         }
         
         document.getElementById("time-input").addEventListener("change", function () {
