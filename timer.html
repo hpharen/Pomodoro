@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
 
     <style>
+        /* Default styles for dark mode */
         body {
             display: flex;
             flex-direction: column;
@@ -22,6 +23,7 @@
             font-weight: 400; /* Or choose any weight between 300 and 800 */
             font-optical-sizing: auto;
             overflow: hidden;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
         }
         .timer-container {
             position: relative;
@@ -331,73 +333,96 @@
                 filter: blur(0px);
             }
         }
+
+        /* Light Mode Styles */
+        .light-mode {
+            background-color: #fff;
+            color: #000;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <input type="checkbox" name="checkbox" class="switch">
-    </div>
-
-    <div class="timer-container">
-        <svg width="400" height="400">
-            <circle cx="200" cy="200" r="180" stroke="#EA3548" stroke-width="20" fill="none" />
-            <circle id="progress" cx="200" cy="200" r="180" stroke="#222" stroke-width="24" fill="none"
-                    stroke-dasharray="1130" stroke-dashoffset="0" stroke-linecap="round" />
-        </svg>
-        <div class="timer" id="timer-display">25:00</div>
-    </div>
-    <div class="controls">
-        <div class="textInputWrapper">
-            <input type="number" id="time-input" value="25" min="1" max="60" class="textInput" placeholder="Type here">
+        <input type="checkbox" class="switch" id="theme-switch"/>
+        <div class="timer-container">
+            <svg viewBox="0 0 100 100" class="circle-svg">
+                <circle cx="50" cy="50" r="45" stroke="#f3f3f3" stroke-width="5" fill="none"/>
+                <circle cx="50" cy="50" r="45" stroke="#EA3548" stroke-width="5" fill="none" stroke-dasharray="282.743" stroke-dashoffset="0" class="countdown"/>
+            </svg>
+            <div class="timer" id="timer-display">25:00</div>
         </div>
-        <button id="start-pause-btn" onclick="toggleTimer()">▶</button>
+        <div class="controls">
+            <div class="textInputWrapper">
+                <input id="time-input" class="textInput" type="number" min="1" max="120" value="25" placeholder="Time"/>
+            </div>
+            <button id="start-btn">Start</button>
+        </div>
     </div>
 
     <script>
-        let duration = 1500; // Default 25 minutes in seconds
-        let timeLeft = duration;
-        let timerInterval;
-        let running = false;
+        const switcher = document.getElementById("theme-switch");
+        const body = document.body;
         const timerDisplay = document.getElementById("timer-display");
-        const progressCircle = document.getElementById("progress");
-        const fullDashOffset = 1130; // Adjusted for new circle size
-        const startPauseBtn = document.getElementById("start-pause-btn");
-        
-        function updateDisplay() {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            progressCircle.style.strokeDashoffset = fullDashOffset * (timeLeft / duration);
+        const startBtn = document.getElementById("start-btn");
+        const timeInput = document.getElementById("time-input");
+        const countdownCircle = document.querySelector(".countdown");
+
+        let timer;
+        let isRunning = false;
+        let timeLeft = 25 * 60;
+        let totalTime = 25 * 60;
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            totalTime = timeLeft; // Update totalTime on every start
+            updateCircle();
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    isRunning = false;
+                    alert("Time's up!");
+                    return;
+                }
+                timeLeft--;
+                updateTimerDisplay();
+                updateCircle();
+            }, 1000);
         }
-        
-        function toggleTimer() {
-            if (running) {
-                clearInterval(timerInterval);
-                running = false;
-                startPauseBtn.textContent = "▶"; // Play icon
-            } else {
-                running = true;
-                timerInterval = setInterval(() => {
-                    if (timeLeft > 0) {
-                        timeLeft--;
-                        updateDisplay();
-                    } else {
-                        clearInterval(timerInterval);
-                        running = false;
-                        startPauseBtn.textContent = "▶"; // Reset to play icon
-                    }
-                }, 1000);
-                startPauseBtn.textContent = "⏸"; // Pause icon
-            }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
         }
-        
-        document.getElementById("time-input").addEventListener("change", function () {
-            duration = this.value * 60;
-            timeLeft = duration;
-            updateDisplay();
+
+        function updateCircle() {
+            const circumference = 282.743;
+            const offset = (timeLeft / totalTime) * circumference;
+            countdownCircle.style.strokeDashoffset = offset;
+        }
+
+        startBtn.addEventListener("click", () => {
+            timeLeft = parseInt(timeInput.value, 10) * 60;
+            totalTime = timeLeft;
+            updateTimerDisplay();
+            updateCircle();
+            startTimer();
         });
-        
-        updateDisplay();
+
+        switcher.addEventListener("change", () => {
+            if (switcher.checked) {
+                body.classList.add("light-mode");
+            } else {
+                body.classList.remove("light-mode");
+            }
+        });
+
+        if (switcher.checked) {
+            body.classList.add("light-mode");
+        } else {
+            body.classList.remove("light-mode");
+        }
     </script>
 </body>
 </html>
