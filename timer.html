@@ -15,20 +15,50 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             background-color: #222;
             color: white;
             font-family: 'Funnel Display', sans-serif;
-            font-weight: 400; /* Or choose any weight between 300 and 800 */
-            font-optical-sizing: auto;
-            overflow: hidden;
-            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
         }
+
+        .wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: fit-content;
+        }
+        .how-to-section {
+            position: absolute;
+            top: 100vh; /* Starts below viewport */
+            padding: 100px 20px;
+            background-color: white;
+            color: #000;
+            width: 100%;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .how-to-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .how-to-section p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+
         .timer-container {
             position: relative;
             width: 400px; /* Doubled size */
             height: 400px; /* Doubled size */
+            margin: 0 auto;
         }
         svg {
             position: absolute;
@@ -165,13 +195,19 @@
             background-color: #d83a3a;
         }
 
+        button:disabled {
+            cursor: not-allowed; /* Changes the cursor to indicate the button is disabled */
+            opacity: 0.7; /* Makes the button look faded */
+        }
+
         .switch {
-            position: absolute;
+            position: fixed;
             top: 10px;
             left: 10px;
             width: 130px;
             height: 50px;
             margin: 0px;
+            z-index: 1000;
             appearance: none;
             -webkit-appearance: none;
             background-color: rgb(4,52,73);
@@ -342,8 +378,9 @@
     </style>
 </head>
 <body>
+    <input type="checkbox" class="switch" id="theme-switch"/>
+
     <div class="wrapper">
-        <input type="checkbox" class="switch" id="theme-switch"/>
         <div class="timer-container">
             <svg viewBox="0 0 100 100" class="circle-svg">
                 <circle cx="50" cy="50" r="45" stroke="#F3F3F3" stroke-width="4.85" fill="none"/>
@@ -356,7 +393,17 @@
                 <input id="time-input" class="textInput" type="number" min="1" max="120" value="25" placeholder="Time"/>
             </div>
             <button id="start-btn">Start</button>
+            <button id = "stop-btn" disabled>Stop</button>
         </div>
+    </div>
+    <!-- New "How to" Section -->
+    <div class="how-to-section">
+        <h2>What is the Pomodoro Technique? 🍅</h2>
+        <p>
+            The Pomodoro Technique is a time management method where you work for 25 minutes, 
+            then take a 5-minute break. After four cycles, take a longer break. 
+            It helps improve focus and productivity!
+        </p>
     </div>
 
     <script>
@@ -364,6 +411,7 @@
         const body = document.body;
         const timerDisplay = document.getElementById("timer-display");
         const startBtn = document.getElementById("start-btn");
+        const stopBtn = document.getElementById("stop-btn");
         const timeInput = document.getElementById("time-input");
         const countdownCircle = document.querySelector(".countdown");
 
@@ -375,12 +423,16 @@
         function startTimer() {
             if (isRunning) return;
             isRunning = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
             totalTime = timeLeft; // Update totalTime on every start
             updateCircle();
             timer = setInterval(() => {
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     isRunning = false;
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
                     alert("Time's up!");
                     return;
                 }
@@ -388,6 +440,13 @@
                 updateTimerDisplay();
                 updateCircle();
             }, 1000);
+        }
+        function stopTimer() {
+            if (!isRunning) return;
+            clearInterval(timer);
+            isRunning = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
         }
 
         function updateTimerDisplay() {
@@ -409,6 +468,7 @@
             updateCircle();
             startTimer();
         });
+        stopBtn.addEventListener("click", stopTimer);
 
         switcher.addEventListener("change", () => {
             if (switcher.checked) {
