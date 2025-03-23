@@ -18,7 +18,7 @@
 
 ### Menus
 - **Issue**:
-  An issue with the original app was that it had menus within other menus, which made the whole process of utilizing the application for it's purpose very tedious just to add a simple task. Another issue was having to confirm deletion everytime you wanted to finish or get rid of a task.
+  An issue with the original app was that it had menus within other menus (nested), which made the whole process of utilizing the application for it's purpose very tedious just to add a simple task. Another issue was having to confirm deletion everytime you wanted to finish or get rid of a task.
 - **Improvement**:
   - Had a one-level menu for tasks instead of nesting a menu within the menu.
   - Once a task is complete, click to cross it off and then have the option to remove it on the side, out of the way.
