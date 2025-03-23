@@ -427,7 +427,7 @@
             position: fixed;
             top: 0;
             right: -300px; /* Start off-screen */
-            width: 300px;
+            width: 270px;
             height: 100%;
             background-color: #333;
             box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
@@ -448,7 +448,6 @@
             font-size: 1.5rem;
         }
 
-        /* From Uiverse.io by JkHuger */ 
         #checklist {
             --background: #333;
             --text: #fff;
@@ -458,7 +457,7 @@
             --height: auto;
             --border-radius: 10px;
             background: var(--background);
-            width: var(--width);
+            width: 220px;
             height: var(--height);
             border-radius: var(--border-radius);
             position: relative;
@@ -485,6 +484,10 @@
             transition: color 0.3s ease;
             margin-right: 20px;
             padding: 5px 0;
+            max-width: 250px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
         }
         #checklist label::before, #checklist label::after {
             content: "";
@@ -568,7 +571,7 @@
             cursor: pointer;
             height: 30px;
             width: 30px;
-            line-height: 30px;
+            line-height: 23px;
             text-align: center;
             border-radius: 50%;
         }
