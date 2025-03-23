@@ -3,8 +3,8 @@
 - **Issue**:  
   User is able to press "Start" when the timer is running and "Stop" when the timer is paused. They are unaware of the states of the buttons.
 - **Improvement**:  
-  - The "Start" button is disabled and greyed out when the timer is running.  
-  - The "Stop" button is disabled and greyed out when the timer is paused.  
+  - The "Start" and "Stop" have been merged into one button because user does not need both options at the same time ever 
+  - Timer shows play icon when timer is not on, and pause icon when timer is running
 
 ### Adding Progressive Disclosure:
 - **Issue**:  
