@@ -702,6 +702,66 @@
         .add-task-btn:hover {
             background-color: #c42232;
         }
+
+        .scroll-arrow-container {
+            position: fixed;
+            bottom: 20px; /* Moved higher up from 30px */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            cursor: pointer;
+            width: 40px; /* Fixed width to ensure proper centering */
+            height: 40px; /* Fixed height to match width */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scroll-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px; /* Reduced from 60px */
+            height: 40px; /* Reduced from 60px */
+            border-radius: 50%;
+            background-color: rgba(30, 30, 30, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            animation: glow 3s infinite alternate;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .scroll-arrow:hover {
+            animation: bounce 2s infinite, glow 3s infinite alternate;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .scroll-arrow svg {
+            transform: rotate(360deg);
+            width: 39px; /* Reduced from default 40px */
+            height: 39px; /* Reduced from default 40px */
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+            }
+        }
     </style>
 </head>
 <body>
@@ -742,6 +802,14 @@
             </div>
             <button id="start-btn">Start</button>
             <button id="stop-btn" disabled>Stop</button>
+        </div>
+    </div>
+
+    <div class="scroll-arrow-container">
+        <div class="scroll-arrow">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 20L12 4M12 20L6 14M12 20L18 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
     </div>
 
@@ -932,6 +1000,12 @@
         } else {
             body.classList.remove("light-mode");
         }
+
+        document.querySelector('.scroll-arrow-container').addEventListener('click', function() {
+            const howToSection = document.querySelector('.how-to-section');
+            howToSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
     </script>
 </body>
 </html>
