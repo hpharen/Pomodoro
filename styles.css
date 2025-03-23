@@ -18,6 +18,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: fit-content;
+            text-align: center;
         }
         .how-to-section {
             position: absolute;
@@ -95,6 +96,13 @@
             margin-top: 40px; /* Doubled margin */
             flex-direction: row; /* Ensures horizontal alignment */
             gap: 100px; /* Optional: Adds spacing between the button and input */
+        }
+        /* Container for the break inputs */
+        .break-controls {
+            display: flex;
+            justify-content: center; /* Center inputs horizontally */
+            gap: 40px; /* Space between inputs */
+            margin-bottom: 20px; /* Space between break inputs and timer */
         }
 
         .textInputWrapper {
@@ -697,6 +705,32 @@
             color: #333;
         }
         */
+        .time-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between input and label */
+        }
+        
+        /* Label for the time input */
+        .time-label {
+            background-color: #EA3548; /* Red background */
+            color: white; /* White text for contrast */
+            font-family: 'Funnel Display', sans-serif; /* Match the site's font */
+            font-size: 18px; /* Match the input font size */
+            font-weight: 400; /* Match the site's font weight */
+            padding: 10px 15px; /* Padding for better spacing */
+            border-radius: 5px; /* Rounded corners */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, opacity 0.3s ease; /* Smooth transitions */
+        }
+        
+        /* Light mode styles for the label */
+        .light-mode .time-label {
+            background-color: #EA3548; /* Keep red background in light mode */
+            color: white; /* Keep white text in light mode */
+        }
         
         .add-task-btn {
             padding: 10px 15px;

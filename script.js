@@ -2,8 +2,8 @@
 const switcher = document.getElementById("theme-switch");
 const body = document.body;
 const timerDisplay = document.getElementById("timer-display");
-const startBtn = document.getElementById("start-btn");
-const stopBtn = document.getElementById("stop-btn");
+//const startBtn = document.getElementById("start-btn");
+//const stopBtn = document.getElementById("stop-btn");
 const timeInput = document.getElementById("time-input");
 const countdownCircle = document.querySelector(".countdown");
 const hamburgerToggle = document.getElementById("hamburger-toggle");
@@ -11,6 +11,11 @@ const taskPanel = document.getElementById("task-panel");
 const addTaskBtn = document.getElementById("add-task-btn");
 const newTaskInput = document.getElementById("new-task-input");
 const checklist = document.getElementById("checklist");
+const pomodoroBtn = document.getElementById("pomodoro-btn");
+const shortBreakBtn = document.getElementById("short-break-btn");
+const longBreakBtn = document.getElementById("long-break-btn");
+const shortBreakInput = document.getElementById("short-break-input");
+const longBreakInput = document.getElementById("long-break-input");
 
 let timer;
 let isRunning = false;
@@ -175,15 +180,6 @@ function updateCircle() {
     countdownCircle.style.strokeDashoffset = offset;
 }
 
-startBtn.addEventListener("click", () => {
-    timeLeft = parseInt(timeInput.value, 10) * 60;
-    totalTime = timeLeft;
-    updateTimerDisplay();
-    updateCircle();
-    startTimer();
-});
-
-stopBtn.addEventListener("click", stopTimer);
 
 switcher.addEventListener("change", () => {
     if (switcher.checked) {
@@ -219,10 +215,32 @@ function updateTimerDisplay() {
     updateTabTitle(minutes, seconds);
 }
 
-// Example: Call updateTabTitle when the timer starts or updates
-startBtn.addEventListener("click", () => {
-    timeLeft = parseInt(timeInput.value, 10) * 60;
-    totalTime = timeLeft;
-    updateTimerDisplay(); // This will also update the tab title
-    startTimer();
+
+
+// Function to reset the timer
+function resetTimer(newTime) {
+    timeLeft = newTime * 60; // Convert minutes to seconds
+    totalTime = timeLeft; // Update total time
+    updateTimerDisplay(); // Update the timer display
+    updateCircle(); // Update the progress circle
+    if (isRunning) {
+        clearInterval(timer); // Stop the current timer
+        timer = setInterval(updateTimer, 1000); // Restart the timer
+    }
+}
+
+// Event listeners for the buttons
+pomodoroBtn.addEventListener("click", () => {
+    const pomodoroTime = parseInt(timeInput.value, 10);
+    resetTimer(pomodoroTime);
+});
+
+shortBreakBtn.addEventListener("click", () => {
+    const shortBreakTime = parseInt(shortBreakInput.value, 10);
+    resetTimer(shortBreakTime);
+});
+
+longBreakBtn.addEventListener("click", () => {
+    const longBreakTime = parseInt(longBreakInput.value, 10);
+    resetTimer(longBreakTime);
 });
