@@ -22,6 +22,7 @@ let isRunning = false;
 let timeLeft = 25 * 60;
 let totalTime = 25 * 60;
 let taskCounter = 1; // Reset counter to 1
+let currentMode = "pomodoro"; // Default mode
 
 // Initial tasks
 const initialTasks = [
@@ -153,15 +154,31 @@ function toggleTimer() {
 }
 
 function resetTimer() {
-    timeLeft = parseInt(timeInput.value, 10) * 60;
+    let newTime;
+    
+    switch (currentMode) {
+        case "shortBreak":
+            newTime = parseInt(shortBreakInput.value, 10);
+            break;
+        case "longBreak":
+            newTime = parseInt(longBreakInput.value, 10);
+            break;
+        case "pomodoro":
+        default:
+            newTime = parseInt(timeInput.value, 10);
+            break;
+    }
+    if (isRunning) {
+        clearInterval(timer);
+        isRunning = false;
+        toggleIcon.classList.replace("fa-pause", "fa-play"); // Reset icon to play
+    }
+    
+    timeLeft = newTime * 60;
     totalTime = timeLeft;
     updateTimerDisplay();
     updateCircle();
     
-    if (isRunning) {
-        clearInterval(timer);
-        timer = setInterval(updateTimer, 1000);
-    }
 }
 
 // Update event listeners
@@ -218,29 +235,33 @@ function updateTimerDisplay() {
 
 
 // Function to reset the timer
-function resetTimer(newTime) {
+function setTimer(newTime) {
+    if (isRunning) {
+        clearInterval(timer);
+        isRunning = false;
+        toggleIcon.classList.replace("fa-pause", "fa-play"); // Reset icon to play
+    }
     timeLeft = newTime * 60; // Convert minutes to seconds
     totalTime = timeLeft; // Update total time
     updateTimerDisplay(); // Update the timer display
     updateCircle(); // Update the progress circle
-    if (isRunning) {
-        clearInterval(timer); // Stop the current timer
-        timer = setInterval(updateTimer, 1000); // Restart the timer
-    }
 }
 
 // Event listeners for the buttons
 pomodoroBtn.addEventListener("click", () => {
     const pomodoroTime = parseInt(timeInput.value, 10);
-    resetTimer(pomodoroTime);
+    currentMode = "pomodoro";
+    setTimer(pomodoroTime);
 });
 
 shortBreakBtn.addEventListener("click", () => {
     const shortBreakTime = parseInt(shortBreakInput.value, 10);
-    resetTimer(shortBreakTime);
+    currentMode = "shortBreak";
+    setTimer(shortBreakTime);
 });
 
 longBreakBtn.addEventListener("click", () => {
     const longBreakTime = parseInt(longBreakInput.value, 10);
-    resetTimer(longBreakTime);
+    currentMode = "longBreak";
+    setTimer(longBreakTime);
 });
