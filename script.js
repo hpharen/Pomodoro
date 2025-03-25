@@ -16,6 +16,7 @@ const shortBreakBtn = document.getElementById("short-break-btn");
 const longBreakBtn = document.getElementById("long-break-btn");
 const shortBreakInput = document.getElementById("short-break-input");
 const longBreakInput = document.getElementById("long-break-input");
+const scrollArrowContainer = document.querySelector('.scroll-arrow-container');
 
 let timer;
 let isRunning = false;
@@ -23,6 +24,7 @@ let timeLeft = 25 * 60;
 let totalTime = 25 * 60;
 let taskCounter = 1; // Reset counter to 1
 let currentMode = "pomodoro"; // Default mode
+let arrowPermanentlyHidden = false;
 
 // Initial tasks
 const initialTasks = [
@@ -145,6 +147,10 @@ function toggleTimer() {
         toggleIcon.classList.replace("fa-play", "fa-pause");
         totalTime = timeLeft === totalTime ? timeLeft : totalTime;
         timer = setInterval(updateTimer, 1000);
+        
+        // Set flag to permanently hide the arrow
+        arrowPermanentlyHidden = true;
+        scrollArrowContainer.classList.add('hidden');
     } else {
         // Pause timer
         isRunning = false;
@@ -232,8 +238,6 @@ function updateTimerDisplay() {
     updateTabTitle(minutes, seconds);
 }
 
-
-
 // Function to reset the timer
 function setTimer(newTime) {
     if (isRunning) {
@@ -265,3 +269,24 @@ longBreakBtn.addEventListener("click", () => {
     currentMode = "longBreak";
     setTimer(longBreakTime);
 });
+
+scrollArrowContainer.addEventListener('click', function() {
+    const howToSection = document.querySelector('.how-to-section');
+    howToSection.scrollIntoView({ behavior: 'smooth' });
+    
+    // Set flag to permanently hide the arrow
+    arrowPermanentlyHidden = true;
+    this.classList.add('hidden');
+});
+
+function manageScrollArrow() {
+    // Only show arrow if it hasn't been permanently hidden
+    if (!arrowPermanentlyHidden && window.scrollY === 0) {
+        scrollArrowContainer.classList.remove('hidden');
+    } else {
+        scrollArrowContainer.classList.add('hidden');
+    }
+}
+
+window.addEventListener('scroll', manageScrollArrow);
+manageScrollArrow();

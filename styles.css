@@ -769,7 +769,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.1s ease; /* Reduced transition time */
+            opacity: 1;
+            transition: opacity 0.5s ease-out, display 0.5s ease-out;
+        }
+
+        .scroll-arrow-container.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .scroll-arrow {
