@@ -56,7 +56,7 @@
 
         #restart-btn {
             padding: 20px 25px;
-            background-color: #666;
+            background-color: #868686;
         }
 
         button i {
@@ -195,6 +195,18 @@
 
         .textInputWrapper:focus-within .textInput::placeholder {
             opacity: 0;
+        }
+
+        .textInputWrapper .textInput[type="number"] {
+            /* Customize the appearance of number input */
+            -moz-appearance: textfield; /* Firefox */
+            appearance: textfield;
+            
+            /* Custom styling for number input arrows */
+            background-color: #868686; /* Match the app's primary color */
+            color: white;
+            border-radius: 5px;
+            text-align: center;
         }
 
         button {
@@ -757,6 +769,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: all 0.1s ease; /* Reduced transition time */
         }
 
         .scroll-arrow {
@@ -776,6 +789,7 @@
             animation: bounce 2s infinite, glow 3s infinite alternate;
             transform: scale(1.1);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            transition: all 0.1s ease;
         }
 
         .scroll-arrow svg {
