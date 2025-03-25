@@ -25,6 +25,8 @@ let totalTime = 25 * 60;
 let taskCounter = 1; // Reset counter to 1
 let currentMode = "pomodoro"; // Default mode
 let arrowPermanentlyHidden = false;
+let pomodoroCount = 0;
+let isBreakTime = false;
 
 // Initial tasks
 const initialTasks = [
@@ -130,6 +132,7 @@ function updateTimer() {
         isRunning = false;
         toggleIcon.classList.replace("fa-pause", "fa-play");
         alert("Time's up!");
+        handleTimerCompletion();
         return;
     }
     
@@ -137,6 +140,59 @@ function updateTimer() {
         timeLeft--;
         updateTimerDisplay();
         updateCircle();
+    }
+}
+
+// function to handle completion logic
+function handleTimerCompletion() {
+    if (currentMode === "pomodoro") {
+        pomodoroCount++;
+        isBreakTime = true;
+        
+        if (pomodoroCount % 4 === 0) {
+            // Every 4th pomodoro, long break
+            currentMode = "longBreak";
+            const longBreakTime = parseInt(longBreakInput.value, 10);
+            setTimer(longBreakTime);
+            alert("Great job! Take a long break!");
+        } else {
+            // Regular short break
+            currentMode = "shortBreak";
+            const shortBreakTime = parseInt(shortBreakInput.value, 10);
+            setTimer(shortBreakTime);
+            alert("Time for a short break!");
+        }
+    } else {
+        // Break is over, back to pomodoro
+        isBreakTime = false;
+        currentMode = "pomodoro";
+        const pomodoroTime = parseInt(timeInput.value, 10);
+        setTimer(pomodoroTime);
+        alert("Break's over! Time to focus!");
+    }
+    
+    // Update UI to reflect current mode
+    updateModeVisuals();
+}
+
+// Add this helper function to update UI
+function updateModeVisuals() {
+    // Reset all button active states
+    pomodoroBtn.classList.remove('active-mode');
+    shortBreakBtn.classList.remove('active-mode');
+    longBreakBtn.classList.remove('active-mode');
+    
+    // Set active state for current mode
+    switch(currentMode) {
+        case "pomodoro":
+            pomodoroBtn.classList.add('active-mode');
+            break;
+        case "shortBreak":
+            shortBreakBtn.classList.add('active-mode');
+            break;
+        case "longBreak":
+            longBreakBtn.classList.add('active-mode');
+            break;
     }
 }
 

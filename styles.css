@@ -63,6 +63,11 @@
             font-size: 22px;
         }
 
+        .active-mode {
+            background-color: #c42232 !important; /* Darker red for active state */
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(234, 53, 72, 0.7);
+        }
 
         .timer-container {
             position: relative;
