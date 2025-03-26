@@ -17,6 +17,8 @@ const longBreakBtn = document.getElementById("long-break-btn");
 const shortBreakInput = document.getElementById("short-break-input");
 const longBreakInput = document.getElementById("long-break-input");
 const scrollArrowContainer = document.querySelector('.scroll-arrow-container');
+const alarmSound = new Audio('alarm.mp3');
+alarmSound.loop = true;
 
 let timer;
 let isRunning = false;
@@ -131,7 +133,17 @@ function updateTimer() {
         clearInterval(timer);
         isRunning = false;
         toggleIcon.classList.replace("fa-pause", "fa-play");
-        alert("Time's up!");
+        
+        // Play alarm sound on loop
+        alarmSound.play().catch(error => {
+            console.error('Error playing alarm sound:', error);
+            // Fallback alert if sound fails
+            alert("Time's up!");
+        });
+        
+        // Add event listener to stop sound on mouse movement
+        document.addEventListener('mousemove', stopAlarmSound);
+        
         handleTimerCompletion();
         return;
     }
@@ -346,3 +358,11 @@ function manageScrollArrow() {
 
 window.addEventListener('scroll', manageScrollArrow);
 manageScrollArrow();
+
+function stopAlarmSound() {
+    alarmSound.pause();
+    alarmSound.currentTime = 0; // Reset sound to start
+    
+    // Remove the event listener after stopping the sound
+    document.removeEventListener('mousemove', stopAlarmSound);
+}
