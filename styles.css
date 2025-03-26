@@ -11,6 +11,30 @@
             transition: background-color 0.3s, color 0.3s;
             position: relative;
         }
+        
+        body.pomodoro-mode {
+            background-color: #222; /* Default dark mode */
+        }
+
+        body.short-break-mode {
+            background-color: #1a2a3a; /* Dark blue-ish */
+        }
+
+        body.long-break-mode {
+            background-color: #2a1a3a; /* Dark purple-ish */
+        }
+
+        .light-mode.pomodoro-mode {
+            background-color: #fff; /* Default light mode */
+        }
+
+        .light-mode.short-break-mode {
+            background-color: #e6f2ff; /* Light blue */
+        }
+
+        .light-mode.long-break-mode {
+            background-color: #f2e6ff; /* Light purple */
+        }
 
         .wrapper {
             position: absolute;

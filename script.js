@@ -189,23 +189,26 @@ function handleTimerCompletion() {
 
 // Add this helper function to update UI
 function updateModeVisuals() {
+    body.classList.remove('pomodoro-mode', 'short-break-mode', 'long-break-mode');
     // Reset all button active states
-    pomodoroBtn.classList.remove('active-mode');
-    shortBreakBtn.classList.remove('active-mode');
-    longBreakBtn.classList.remove('active-mode');
-    
-    // Set active state for current mode
     switch(currentMode) {
         case "pomodoro":
+            body.classList.add('pomodoro-mode');
             pomodoroBtn.classList.add('active-mode');
             break;
         case "shortBreak":
+            body.classList.add('short-break-mode');
             shortBreakBtn.classList.add('active-mode');
             break;
         case "longBreak":
+            body.classList.add('long-break-mode');
             longBreakBtn.classList.add('active-mode');
             break;
     }
+    // Update other button states
+    pomodoroBtn.classList.remove('active-mode');
+    shortBreakBtn.classList.remove('active-mode');
+    longBreakBtn.classList.remove('active-mode');
 }
 
 function toggleTimer() {
@@ -317,6 +320,7 @@ function setTimer(newTime) {
     totalTime = timeLeft; // Update total time
     updateTimerDisplay(); // Update the timer display
     updateCircle(); // Update the progress circle
+    updateModeVisuals();
 }
 
 // Event listeners for the buttons
@@ -324,18 +328,21 @@ pomodoroBtn.addEventListener("click", () => {
     const pomodoroTime = parseInt(timeInput.value, 10);
     currentMode = "pomodoro";
     setTimer(pomodoroTime);
+    updateModeVisuals();
 });
 
 shortBreakBtn.addEventListener("click", () => {
     const shortBreakTime = parseInt(shortBreakInput.value, 10);
     currentMode = "shortBreak";
     setTimer(shortBreakTime);
+    updateModeVisuals();
 });
 
 longBreakBtn.addEventListener("click", () => {
     const longBreakTime = parseInt(longBreakInput.value, 10);
     currentMode = "longBreak";
     setTimer(longBreakTime);
+    updateModeVisuals();
 });
 
 scrollArrowContainer.addEventListener('click', function() {
