@@ -1,4 +1,11 @@
 # Pomodoro Redesign
+
+### Automated Break Transitions & Looping  
+- The timer  automatically starts a break when a session ends.  
+- After four Pomodoros**, a long break** starts automatically.  
+- No need to manually restart the timer— looping works seamlessly.  
+- Alarm sound plays at the end of each session.  
+
 ### Fixing Gulf of Evaluation:
 - **Issue**:  
   User is able to press "Start" when the timer is running and "Stop" when the timer is paused. They are unaware of the states of the buttons.
