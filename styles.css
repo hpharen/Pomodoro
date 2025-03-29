@@ -67,6 +67,158 @@
             line-height: 1.6;
         }
 
+        /* How To Section Enhancements */
+        /* How To Section - Light Background Version */
+        .how-to-section {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            color: #333;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .instructions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .instruction-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .instruction-icon {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 40px;
+            height: 40px;
+            background: #EA3548;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .instruction-card h3 {
+            color: #EA3548;
+            margin-top: 5px;
+        }
+
+        .time-setting {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .time-label {
+            font-weight: 600;
+        }
+
+        .time-value {
+            color: #EA3548;
+            font-family: 'Funnel Display', sans-serif;
+        }
+
+        .button-demo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: #EA3548;
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .task-demo {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .task-demo li {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .task-demo i {
+            color: #EA3548;
+        }
+
+        .pro-tips {
+            background: #f0f0f0;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+
+        .pro-tips h3 {
+            color: #EA3548;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pro-tips ul {
+            padding-left: 20px;
+        }
+
+        .pro-tips li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        /* Dark mode adjustments */
+        body.dark-mode .how-to-section {
+            background-color: #222222;
+            color: white;
+        }
+
+        body.dark-mode .instruction-card {
+            background: #333;
+            color: white;
+        }
+
+        body.dark-mode .time-setting,
+        body.dark-mode .task-demo li {
+            background: #444;
+            color: white;
+        }
+
+        body.dark-mode .pro-tips {
+            background: #2a2a2a;
+        }
+        
+
         .control-group {
             display: flex;
             gap: 20px;
