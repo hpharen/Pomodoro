@@ -18,6 +18,7 @@ const shortBreakInput = document.getElementById("short-break-input");
 const longBreakInput = document.getElementById("long-break-input");
 const scrollArrowContainer = document.querySelector('.scroll-arrow-container');
 const alarmSound = new Audio('https://hpharen.github.io/Pomodoro/alarm.mp3');
+alarmSound.preload = "auto"; // Preload the sound for better performance
 alarmSound.loop = true;
 
 let timer;
@@ -213,6 +214,14 @@ function updateModeVisuals() {
 
 function toggleTimer() {
     if (!isRunning) {
+        // Prime the audio (play/pause quickly on user interaction)
+        if (!audioPrimed) {
+            alarmSound.play().then(() => {
+                alarmSound.pause();
+                alarmSound.currentTime = 0;
+                audioPrimed = true; // Now future playback is allowed
+            }).catch(e => console.log("Audio priming failed:", e));
+        }
         // Start/resume timer
         isRunning = true;
         toggleIcon.classList.replace("fa-play", "fa-pause");
