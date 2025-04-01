@@ -30,6 +30,8 @@ let currentMode = "pomodoro"; // Default mode
 let arrowPermanentlyHidden = false;
 let pomodoroCount = 0;
 let isBreakTime = false;
+let audioPrimed = false;
+
 
 // Initial tasks
 const initialTasks = [
