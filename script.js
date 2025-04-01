@@ -17,7 +17,7 @@ const longBreakBtn = document.getElementById("long-break-btn");
 const shortBreakInput = document.getElementById("short-break-input");
 const longBreakInput = document.getElementById("long-break-input");
 const scrollArrowContainer = document.querySelector('.scroll-arrow-container');
-const alarmSound = new Audio('/alarm.mp3');
+const alarmSound = new Audio('https://hpharen.github.io/pomodoro-timer/alarm.mp3');
 alarmSound.loop = true;
 
 let timer;
