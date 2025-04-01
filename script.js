@@ -187,7 +187,7 @@ function handleTimerCompletion() {
     updateModeVisuals();
 }
 
-// Add this helper function to update UI
+// Helper function to update UI
 function updateModeVisuals() {
     body.classList.remove('pomodoro-mode', 'short-break-mode', 'long-break-mode');
     // Reset all button active states
