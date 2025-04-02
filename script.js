@@ -17,9 +17,9 @@ const longBreakBtn = document.getElementById("long-break-btn");
 const shortBreakInput = document.getElementById("short-break-input");
 const longBreakInput = document.getElementById("long-break-input");
 const scrollArrowContainer = document.querySelector('.scroll-arrow-container');
-const alarmSound = new Audio('https://hpharen.github.io/Pomodoro/alarm.mp3');
-alarmSound.preload = "auto"; // Preload the sound for better performance
-alarmSound.loop = true;
+//const alarmSound = new Audio('https://hpharen.github.io/Pomodoro/alarm.mp3');
+
+//alarmSound.loop = true;
 
 let timer;
 let isRunning = false;
@@ -30,7 +30,9 @@ let currentMode = "pomodoro"; // Default mode
 let arrowPermanentlyHidden = false;
 let pomodoroCount = 0;
 let isBreakTime = false;
-let audioPrimed = false;
+let audioContext;
+let alarmBuffer;
+let alarmSource;
 
 
 // Initial tasks
@@ -40,6 +42,38 @@ const initialTasks = [
     "Review project notes",
     "Plan tomorrow's tasks"
 ];
+
+async function loadAudio() {
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const response = await fetch('https://hpharen.github.io/Pomodoro/alarm.mp3');
+      const arrayBuffer = await response.arrayBuffer();
+      alarmBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    } catch (e) {
+      console.error("Audio load failed:", e);
+    }
+  }
+  loadAudio(); // Call on page load
+  
+  // Play alarm (loop enabled)
+  function playAlarm() {
+    if (!alarmBuffer) return;
+    stopAlarm(); // Stop any existing playback
+    alarmSource = audioContext.createBufferSource();
+    alarmSource.buffer = alarmBuffer;
+    alarmSource.loop = true;
+    alarmSource.connect(audioContext.destination);
+    alarmSource.start(0);
+  }
+  
+  // Stop alarm
+  function stopAlarm() {
+    if (alarmSource) {
+      alarmSource.stop();
+      alarmSource.disconnect();
+      alarmSource = null;
+    }
+  }
 
 // Initialize tasks
 function initializeTasks() {
@@ -136,21 +170,25 @@ function updateTimer() {
         clearInterval(timer);
         isRunning = false;
         toggleIcon.classList.replace("fa-pause", "fa-play");
-        
-        // Play alarm sound on loop
-        alarmSound.play().catch(error => {
-            console.error('Error playing alarm sound:', error);
-            // Fallback alert if sound fails
-            alert("Time's up!");
-        });
-        
-        // Add event listener to stop sound on mouse movement
-        document.addEventListener('mousemove', stopAlarmSound);
-        
-        handleTimerCompletion();
+
+        // Resume audio context if suspended
+        if (audioContext?.state === "suspended") {
+            audioContext.resume();
+        }
+
+        // Play alarm immediately
+        playAlarm();
+
+        // Wait a short moment before alerting to allow audio to start
+        setTimeout(() => {
+            alert(currentMode === "pomodoro" ? "Time for a break!" : "Back to work!");
+            stopAlarm();
+            handleTimerCompletion();
+        }, 200); // 200ms delay gives audio time to start playing
+
         return;
     }
-    
+
     if (isRunning) {
         timeLeft--;
         updateTimerDisplay();
@@ -158,37 +196,27 @@ function updateTimer() {
     }
 }
 
+
 // function to handle completion logic
 function handleTimerCompletion() {
+    // Mode switching logic only (no alerts)
     if (currentMode === "pomodoro") {
-        pomodoroCount++;
-        isBreakTime = true;
-        
-        if (pomodoroCount % 4 === 0) {
-            // Every 4th pomodoro, long break
-            currentMode = "longBreak";
-            const longBreakTime = parseInt(longBreakInput.value, 10);
-            setTimer(longBreakTime);
-            alert("Great job! Take a long break!");
-        } else {
-            // Regular short break
-            currentMode = "shortBreak";
-            const shortBreakTime = parseInt(shortBreakInput.value, 10);
-            setTimer(shortBreakTime);
-            alert("Time for a short break!");
-        }
+      pomodoroCount++;
+      isBreakTime = true;
+      if (pomodoroCount % 4 === 0) {
+        currentMode = "longBreak";
+        setTimer(parseInt(longBreakInput.value, 10));
+      } else {
+        currentMode = "shortBreak";
+        setTimer(parseInt(shortBreakInput.value, 10));
+      }
     } else {
-        // Break is over, back to pomodoro
-        isBreakTime = false;
-        currentMode = "pomodoro";
-        const pomodoroTime = parseInt(timeInput.value, 10);
-        setTimer(pomodoroTime);
-        alert("Break's over! Time to focus!");
+      isBreakTime = false;
+      currentMode = "pomodoro";
+      setTimer(parseInt(timeInput.value, 10));
     }
-    
-    // Update UI to reflect current mode
     updateModeVisuals();
-}
+  }
 
 // Helper function to update UI
 function updateModeVisuals() {
@@ -214,32 +242,27 @@ function updateModeVisuals() {
     longBreakBtn.classList.remove('active-mode');
 }
 
-function toggleTimer() {
+async function toggleTimer() {
     if (!isRunning) {
-        // Prime the audio (play/pause quickly on user interaction)
-        if (!audioPrimed) {
-            alarmSound.play().then(() => {
-                alarmSound.pause();
-                alarmSound.currentTime = 0;
-                audioPrimed = true; // Now future playback is allowed
-            }).catch(e => console.log("Audio priming failed:", e));
-        }
-        // Start/resume timer
-        isRunning = true;
-        toggleIcon.classList.replace("fa-play", "fa-pause");
-        totalTime = timeLeft === totalTime ? timeLeft : totalTime;
-        timer = setInterval(updateTimer, 1000);
-        
-        // Set flag to permanently hide the arrow
-        arrowPermanentlyHidden = true;
-        scrollArrowContainer.classList.add('hidden');
+      // Resume audio context if needed (crucial for iOS)
+      if (audioContext?.state === "suspended") {
+        await audioContext.resume();
+      }
+  
+      // Start timer
+      isRunning = true;
+      toggleIcon.classList.replace("fa-play", "fa-pause");
+      timer = setInterval(updateTimer, 1000);
+      
+      arrowPermanentlyHidden = true;
+      scrollArrowContainer.classList.add('hidden');
     } else {
-        // Pause timer
-        isRunning = false;
-        toggleIcon.classList.replace("fa-pause", "fa-play");
-        clearInterval(timer);
+      isRunning = false;
+      toggleIcon.classList.replace("fa-pause", "fa-play");
+      clearInterval(timer);
     }
-}
+  }
+  
 
 function resetTimer() {
     let newTime;
@@ -377,10 +400,3 @@ function manageScrollArrow() {
 window.addEventListener('scroll', manageScrollArrow);
 manageScrollArrow();
 
-function stopAlarmSound() {
-    alarmSound.pause();
-    alarmSound.currentTime = 0; // Reset sound to start
-    
-    // Remove the event listener after stopping the sound
-    document.removeEventListener('mousemove', stopAlarmSound);
-}
