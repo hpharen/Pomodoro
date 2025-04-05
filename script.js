@@ -323,6 +323,11 @@ if (switcher.checked) {
     body.classList.remove("light-mode");
 }
 
+// Function to scroll to How-To section
+document.getElementById('how-to-btn').addEventListener('click', () => {
+    document.querySelector('.how-to-section').scrollIntoView({ behavior: 'smooth' });
+});
+
 document.querySelector('.scroll-arrow-container').addEventListener('click', function() {
     const howToSection = document.querySelector('.how-to-section');
     howToSection.scrollIntoView({ behavior: 'smooth' });

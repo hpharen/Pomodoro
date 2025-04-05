@@ -1005,3 +1005,19 @@
                 box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
             }
         }
+
+        .how-to-btn {
+            position: fixed;
+            top: 15%;
+            left: 0;
+            margin-left: 10px;
+            transform: translateY(-50%);
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            background-color: #EA3548;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px 8px 8px 8px;
+            z-index: 1000; /* make sure it's on top */
+        }
